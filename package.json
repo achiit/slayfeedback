@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "aws-serverless-express": "^3.4.0",
+    "express": "^4.21.2",
+    "pg": "^8.13.3",
+    "sequelize": "^6.37.5"
+  }
+}
