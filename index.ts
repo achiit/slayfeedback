@@ -1,6 +1,5 @@
-const express = require("express");
-const { Sequelize, DataTypes } = require("sequelize");
-const serverlessExpress = require("aws-serverless-express");
+import express from "express";
+import { Sequelize, DataTypes } from "sequelize";
 
 // Initialize Express app
 const app = express();
@@ -44,8 +43,8 @@ const Feedback = sequelize.define(
     },
   },
   {
-    tableName: "feedback",
-    timestamps: false,
+    tableName: "feedback", // Name of the table in the database
+    timestamps: false, // Disable createdAt and updatedAt fields
   }
 );
 
@@ -91,8 +90,8 @@ app.get("/", (req, res) => {
   res.send("Welcome to the Feedback API!");
 });
 
-// Export the handler for AWS Lambda
-exports.handler = async (event, context) => {
-  const server = serverlessExpress.createServer(app);
-  return serverlessExpress.proxy(server, event, context);
-};
+// Start the server
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
