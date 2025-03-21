@@ -1,9 +1,11 @@
 import express from "express";
 import { Sequelize, DataTypes } from "sequelize";
+import path from "path";
 
 // Initialize Express app
 const app = express();
 app.use(express.json()); // Middleware to parse JSON bodies
+app.use(express.static(path.join(__dirname, 'public'))); // Serve static files from public directory
 
 // PostgreSQL database configuration
 const sequelize = new Sequelize("feedback_db", "postgres", "slayappios#123", {
@@ -59,6 +61,17 @@ const Feedback = sequelize.define(
   }
 })();
 
+// GET /feedback - Get all feedback
+app.get("/feedback", async (req, res) => {
+  try {
+    const feedback = await Feedback.findAll();
+    res.status(200).json(feedback);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Internal server error." });
+  }
+});
+
 // POST /feedback - Submit feedback
 app.post("/feedback", async (req, res) => {
   try {
@@ -85,9 +98,9 @@ app.post("/feedback", async (req, res) => {
   }
 });
 
-// Default route
+// Default route - serve the HTML dashboard
 app.get("/", (req, res) => {
-  res.send("Welcome to the Feedback API!");
+  res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
 // Start the server
